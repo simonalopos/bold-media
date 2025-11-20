@@ -14,9 +14,19 @@
             margin-top: 15px;
             font-weight: 500;
             display: none;
+            padding: 10px;
+            border-radius: 4px;
         }
-        .status-success { color: #4ade80; }
-        .status-error { color: #f87171; }
+        .status-success { 
+            color: #155724; 
+            background-color: #d4edda; 
+            border: 1px solid #c3e6cb;
+        }
+        .status-error { 
+            color: #721c24; 
+            background-color: #f8d7da; 
+            border: 1px solid #f5c6cb;
+        }
         /* Načítavacia animácia pre tlačidlo */
         .btn-loading {
             opacity: 0.7;
@@ -263,10 +273,10 @@
     
     <script src="script.js"></script>
 
-    <!-- Script pre prepojenie s Google Sheets -->
+    <!-- NOVÝ SCRIPT: Posielanie dát ako JSON (Spoľahlivejšie) -->
     <script>
-        // SEM VLOŽTE URL ADRESU VYGENEROVANÚ Z GOOGLE APPS SCRIPT
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzDzpLo0rTjrhrbT8unRSp4drbC7h6G60s3CwiH8SOttQnJQIIwYqU-Kan7V_bxHa--cQ/exec';
+        // !!! SEM VLOŽTE NOVÚ URL ADRESU Z NASADENIA (DEPLOY) !!!
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxPsuq_tS_jpvN2ghMsHgC49C1SfDNsoRQoq0--lkR-1xXPF9SDAfjcePKjG_r6Wo9IUA/exec';
         
         const form = document.forms['submit-to-google-sheet'];
         const statusMsg = document.getElementById('form-status');
@@ -276,36 +286,45 @@
         form.addEventListener('submit', e => {
             e.preventDefault();
             
-            // UI loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Odosielam...';
             submitBtn.classList.add('btn-loading');
             statusMsg.style.display = 'none';
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => {
-                // Úspešné odoslanie
+            // 1. Získame dáta z formulára
+            const formData = new FormData(form);
+            // 2. Konvertujeme ich na obyčajný JavaScript objekt
+            const data = Object.fromEntries(formData.entries());
+
+            // 3. Pošleme ako JSON string
+            // Používame no-cors, ale posielame stringify body, čo skript backendu spracuje cez JSON.parse
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: JSON.stringify(data),
+                mode: 'no-cors', // Dôležité pre obídenie CORS chýb v konzole
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8', // Používame text/plain aby sme sa vyhli "preflight" CORS requestu
+                }
+            })
+            .then(() => {
+                // Pri no-cors nevidíme response, ale ak request nezlyhal, predpokladáme úspech
                 statusMsg.innerHTML = "Ďakujeme! Správa bola úspešne odoslaná. Čoskoro sa vám ozveme.";
                 statusMsg.className = "status-success";
                 statusMsg.style.display = "block";
                 
-                // Reset formulára
                 form.reset();
                 
-                // Reset tlačidla
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.classList.remove('btn-loading');
                 
-                // Skrytie správy po 5 sekundách
                 setTimeout(() => {
                     statusMsg.style.display = 'none';
-                }, 5000);
+                }, 7000);
             })
             .catch(error => {
-                // Chyba
                 console.error('Error!', error.message);
-                statusMsg.innerHTML = "Chyba pri odosielaní. Skúste to prosím neskôr alebo nám napíšte priamo na email.";
+                statusMsg.innerHTML = "Chyba pri odosielaní. Skontrolujte pripojenie.";
                 statusMsg.className = "status-error";
                 statusMsg.style.display = "block";
                 
