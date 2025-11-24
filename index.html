@@ -308,6 +308,35 @@
                     </div>
 
                     <div class="contact-grid">
+                        <div class="form-container">
+                            <form name="submit-to-google-sheet" class="glass-form">
+                                <h3 class="form-cta">ZAČNITE SVOJ PROJEKT</h3>
+                                <div class="form-row">
+                                    <div class="input-wrap">
+                                        <input type="text" name="name" required placeholder=" ">
+                                        <label>Meno</label>
+                                    </div>
+                                    <div class="input-wrap">
+                                        <input type="text" name="company" required placeholder=" ">
+                                        <label>Firma</label>
+                                    </div>
+                                </div>
+                                <div class="input-wrap">
+                                    <input type="email" name="email" required placeholder=" ">
+                                    <label>Email / Telefónne číslo</label>
+                                </div>
+                                <div class="input-wrap">
+                                    <textarea name="message" required placeholder=" " rows="1"></textarea>
+                                    <label>Ako vám môžeme pomôcť?</label>
+                                </div>
+                                <button type="submit" class="btn-submit obsidian-btn" id="submit-btn">
+                                    <span class="btn-text">NAŠTARTOVAŤ ZNAČKU</span>
+                                    <div class="btn-glow"></div>
+                                </button>
+                                <div id="form-status"></div>
+                            </form>
+                        </div>
+
                         <div class="contact-details">
                             <div class="detail-item">
                                 <label>Email</label>
@@ -315,40 +344,9 @@
                                     class="hover-link">simona.loposova@boldmedia.sk</a>
                             </div>
                             <div class="detail-item">
-                                <label>Telefón</label>
-                                <a href="tel:+421900000000" class="hover-link">+421 900 000 000</a>
-                            </div>
-                            <div class="detail-item">
                                 <label>Adresa</label>
                                 <p>Karadžičova 14,<br>821 08 Bratislava</p>
                             </div>
-                        </div>
-
-                        <div class="form-container">
-                            <form name="submit-to-google-sheet" class="glass-form">
-                                <div class="form-row">
-                                    <div class="input-wrap">
-                                        <input type="text" name="name" required placeholder=" ">
-                                        <label>Meno / Firma</label>
-                                        <div class="line"></div>
-                                    </div>
-                                    <div class="input-wrap">
-                                        <input type="email" name="email" required placeholder=" ">
-                                        <label>Email</label>
-                                        <div class="line"></div>
-                                    </div>
-                                </div>
-                                <div class="input-wrap">
-                                    <textarea name="message" required placeholder=" " rows="1"></textarea>
-                                    <label>O čom je váš projekt?</label>
-                                    <div class="line"></div>
-                                </div>
-                                <button type="submit" class="btn-submit" id="submit-btn">
-                                    <span>Odoslať Správu</span>
-                                    <div class="icon">→</div>
-                                </button>
-                                <div id="form-status"></div>
-                            </form>
                         </div>
                     </div>
 
