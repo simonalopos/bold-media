@@ -388,133 +388,23 @@ a {
     z-index: 1;
 }
 
-/* --- Brand Composition Visual --- */
-.brand-visual {
+/* --- Three.js Hero Visual --- */
+#hero-canvas-container {
+    width: 100%;
+    height: 100%;
     position: relative;
-    width: 400px;
-    height: 400px;
-    transform-style: preserve-3d;
-    animation: visual-float 6s ease-in-out infinite;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* 1. The Bold Cube (Structure) */
-.brand-cube {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 180px;
-    height: 180px;
-    transform: translate(-50%, -50%) rotateX(20deg) rotateY(45deg);
-    transform-style: preserve-3d;
-    animation: cube-rotate 20s linear infinite;
+#hero-canvas-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
 }
 
-.cube-face {
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-dark));
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    opacity: 0.9;
-}
-
-.cube-face:nth-child(1) {
-    transform: rotateY(0deg) translateZ(90px);
-}
-
-.cube-face:nth-child(2) {
-    transform: rotateY(90deg) translateZ(90px);
-}
-
-.cube-face:nth-child(3) {
-    transform: rotateY(180deg) translateZ(90px);
-}
-
-.cube-face:nth-child(4) {
-    transform: rotateY(-90deg) translateZ(90px);
-}
-
-.cube-face:nth-child(5) {
-    transform: rotateX(90deg) translateZ(90px);
-}
-
-.cube-face:nth-child(6) {
-    transform: rotateX(-90deg) translateZ(90px);
-}
-
-/* 2. The Accent Sphere (Creativity/Yellow) */
-.brand-sphere {
-    position: absolute;
-    top: 20%;
-    right: 20%;
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle at 30% 30%, #FFFF00, var(--accent-yellow));
-    border-radius: 50%;
-    box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
-    transform: translateZ(150px);
-    animation: sphere-orbit 8s ease-in-out infinite;
-}
-
-/* 3. The Media Ring (Digital/Glass) */
-.brand-ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 350px;
-    height: 350px;
-    border: 20px solid rgba(255, 255, 255, 0.05);
-    border-top: 20px solid var(--accent-light);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) rotateX(70deg);
-    filter: blur(5px);
-    box-shadow: 0 0 20px rgba(0, 102, 255, 0.2);
-    animation: ring-spin-slow 15s linear infinite;
-}
-
-@keyframes visual-float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-@keyframes cube-rotate {
-    0% {
-        transform: translate(-50%, -50%) rotateX(20deg) rotateY(0deg);
-    }
-
-    100% {
-        transform: translate(-50%, -50%) rotateX(20deg) rotateY(360deg);
-    }
-}
-
-@keyframes sphere-orbit {
-
-    0%,
-    100% {
-        transform: translateZ(120px) translateY(0);
-    }
-
-    50% {
-        transform: translateZ(120px) translateY(-40px);
-    }
-}
-
-@keyframes ring-spin-slow {
-    0% {
-        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg);
-    }
-
-    100% {
-        transform: translate(-50%, -50%) rotateX(70deg) rotateZ(360deg);
-    }
-}
 
 @media (max-width: 992px) {
     .hero-container {

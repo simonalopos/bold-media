@@ -19,6 +19,12 @@
 
     <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
@@ -68,18 +74,7 @@
                 </div>
 
                 <div class="hero-visual">
-                    <div class="brand-visual">
-                        <div class="brand-ring"></div>
-                        <div class="brand-cube">
-                            <div class="cube-face"></div>
-                            <div class="cube-face"></div>
-                            <div class="cube-face"></div>
-                            <div class="cube-face"></div>
-                            <div class="cube-face"></div>
-                            <div class="cube-face"></div>
-                        </div>
-                        <div class="brand-sphere"></div>
-                    </div>
+                    <div id="hero-canvas-container"></div>
                 </div>
 
         </section>
@@ -310,7 +305,7 @@
                     <div class="contact-grid">
                         <div class="form-container">
                             <form name="submit-to-google-sheet" class="glass-form">
-                                <h3 class="form-cta">ZAČNITE SVOJ PROJEKT</h3>
+                                <h3 class="form-cta">VYTVORME NIEČO VEĽKÉ</h3>
                                 <div class="form-row">
                                     <div class="input-wrap">
                                         <input type="text" name="name" required placeholder=" ">
@@ -330,7 +325,7 @@
                                     <label>Ako vám môžeme pomôcť?</label>
                                 </div>
                                 <button type="submit" class="btn-submit obsidian-btn" id="submit-btn">
-                                    <span class="btn-text">NAŠTARTOVAŤ ZNAČKU</span>
+                                    <span class="btn-text">ODOSLAŤ VÍZIU</span>
                                     <div class="btn-glow"></div>
                                 </button>
                                 <div id="form-status"></div>
@@ -348,6 +343,12 @@
                                 <p>Karadžičova 14,<br>821 08 Bratislava</p>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="team-group-photo-bottom"
+                        style="margin-top: 80px; width: 24%; height: auto; margin-right: auto; background: var(--accent-blue); position: relative; border-radius: var(--radius-lg); overflow: hidden;">
+                        <img src="group.png" alt="Bold Media Team"
+                            style="height: auto; width: 100%; display: block; filter: grayscale(100%) contrast(1.1); mix-blend-mode: multiply;">
                     </div>
 
                     <div class="footer-bottom">
