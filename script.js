@@ -614,3 +614,39 @@ if (container) {
         composer.setSize(container.clientWidth, container.clientHeight);
     });
 }
+
+// Mobile Menu Toggle
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const mobileNavLinks = document.querySelector('.nav-links');
+
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+        mobileMenuToggle.classList.toggle('active');
+        mobileNavLinks.classList.toggle('active');
+
+        // Prevent body scroll when menu is open
+        if (mobileNavLinks.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Close menu when clicking on a link
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenuToggle.classList.remove('active');
+            mobileNavLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-container')) {
+            mobileMenuToggle.classList.remove('active');
+            mobileNavLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}

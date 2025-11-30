@@ -28,6 +28,212 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+
+    <!-- Upravené štýly pre sekciu TÍM -->
+    <style>
+        #team {
+            padding: 120px 0;
+            background: linear-gradient(120deg, #101a3c 0%, #050a18 100%);
+            color: #e6e9ee;
+        }
+
+        #team .section-header {
+            text-align: left;
+            margin-bottom: 60px;
+        }
+
+        #team .section-header .section-label {
+            display: inline-block;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+
+        #team .section-header .section-title {
+            color: #fff;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .member-card {
+            background: linear-gradient(135deg, rgba(13, 71, 161, 0.05), rgba(13, 71, 161, 0.02));
+            border: 1px solid rgba(13, 71, 161, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(2, 6, 23, 0.5);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .member-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(13, 71, 161, 0.4);
+            box-shadow: 0 15px 50px rgba(13, 71, 161, 0.2);
+        }
+
+        .member-avatar {
+            width: 100%;
+            height: 340px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s ease;
+        }
+
+        .member-card:hover .member-avatar img {
+            transform: scale(1.05);
+        }
+
+        .member-header {
+            padding: 20px 25px;
+            text-align: center;
+        }
+
+        .member-header h3 {
+            margin: 0 0 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .member-header .role {
+            font-size: 0.85rem;
+            color: #0d47a1;
+            margin-bottom: 0;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .member-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 25px;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s ease;
+        }
+
+        .member-card:hover .member-content {
+            max-height: 500px;
+            padding: 20px 25px;
+        }
+
+        .member-content .bio {
+            font-size: 0.9rem;
+            color: #cbd5df;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .member-indicator {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            #team .section-header .section-title {
+                font-size: 2rem;
+            }
+
+            .member-card {
+                border-radius: 16px;
+            }
+
+            .member-avatar {
+                height: 300px;
+            }
+
+            .member-header {
+                padding: 18px 20px;
+            }
+        }
+
+        /* ...existing styles... */
+
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            background: #111a36;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .hero-visual {
+            flex: 1;
+            position: relative;
+            min-width: 350px;
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        /* Nový SVG grafický prvok */
+        .media-orbit {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 340px;
+            height: 340px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        @media (max-width: 900px) {
+            .hero-container {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .hero-visual {
+                min-width: 100%;
+                min-height: 220px;
+                justify-content: center;
+            }
+
+            .media-orbit {
+                position: static;
+                transform: none;
+                margin: 0 auto;
+                width: 220px;
+                height: 220px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -45,6 +251,11 @@
             <a href="#" class="nav-logo">
                 <img src="logo.png" alt="BOLD MEDIA">
             </a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="nav-links">
                 <a href="#services" class="nav-link" data-text="Služby">Služby</a>
                 <a href="#process" class="nav-link" data-text="Proces">Proces</a>
@@ -75,6 +286,58 @@
 
                 <div class="hero-visual">
                     <div id="hero-canvas-container"></div>
+                    <!-- Enhanced graphic element: animated rings with glow and yellow accents -->
+                    <div class="media-orbit">
+                        <svg id="bm-logo-pulse" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="bmGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                    <stop offset="0%" stop-color="#ffd700" stop-opacity="0.9" />
+                                    <stop offset="40%" stop-color="#1565c0" stop-opacity="0.7" />
+                                    <stop offset="100%" stop-color="#0a3d91" stop-opacity="0.4" />
+                                </radialGradient>
+                                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#1565c0" />
+                                    <stop offset="50%" stop-color="#4d94ff" />
+                                    <stop offset="100%" stop-color="#ffd700" />
+                                </linearGradient>
+                                <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ffd700" />
+                                    <stop offset="100%" stop-color="#ffed4e" />
+                                </linearGradient>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <!-- Outer rotating ring with blue-yellow gradient -->
+                            <circle id="outerRing" cx="200" cy="200" r="120" stroke="url(#ringGradient)"
+                                stroke-width="2" fill="none" opacity="0.5" filter="url(#glow)" />
+
+                            <!-- Middle ring -->
+                            <circle id="middleRing" cx="200" cy="200" r="90" stroke="url(#ringGradient)"
+                                stroke-width="3" fill="none" opacity="0.6" filter="url(#glow)" />
+
+                            <!-- Inner pulsing circle with yellow center -->
+                            <circle id="bmPulseCircle" cx="200" cy="200" r="60" fill="url(#bmGradient)" opacity="0.8"
+                                filter="url(#glow)" />
+
+                            <!-- Orbiting particles - mix of blue and yellow -->
+                            <circle id="particle1" cx="200" cy="80" r="5" fill="#ffd700" opacity="0.9"
+                                filter="url(#glow)" />
+                            <circle id="particle2" cx="200" cy="320" r="4" fill="#1565c0" opacity="0.8" />
+                            <circle id="particle3" cx="80" cy="200" r="4.5" fill="#ffed4e" opacity="0.9"
+                                filter="url(#glow)" />
+                            <circle id="particle4" cx="320" cy="200" r="4" fill="#4d94ff" opacity="0.8" />
+
+                            <!-- Additional yellow accent particles -->
+                            <circle id="particle5" cx="200" cy="200" r="3" fill="#ffd700" opacity="0.9" />
+                            <circle id="particle6" cx="200" cy="200" r="3" fill="#ffed4e" opacity="0.9" />
+                        </svg>
+                    </div>
                 </div>
 
         </section>
@@ -188,7 +451,7 @@
                         </div>
 
                         <!-- Step 3 -->
-                        <div class="timeline-step">
+                        <div class="timeline-step last-step">
                             <div class="step-num">03</div>
                             <div class="step-content">
                                 <h3>Vyhodnocovanie a optimalizácia</h3>
@@ -214,14 +477,17 @@
                 </div>
 
                 <div class="team-grid">
-                    <!-- Member 1: Lukáš Bednár -->
+                    <!-- Member 1 -->
                     <div class="member-card">
-                        <div class="member-img">
+                        <div class="member-avatar">
                             <img src="image5.png" alt="Lukáš Bednár">
                         </div>
-                        <div class="member-info">
+                        <div class="member-header">
                             <h3>Lukáš Bednár</h3>
                             <span class="role">CEO BOLD MEDIA</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
                             <p class="bio">Strategicky vedie spolupráce s najväčšími značkami a reklamnými agentúrami na
                                 trhu. Bývalý šéf obchodného oddelenia v News & Media Holding s riadeným obratom 30 mil.
                                 €. Ako certifikovaný Google Trainer a držiteľ viac ako 20 odborných certifikátov prináša
@@ -230,14 +496,17 @@
                         </div>
                     </div>
 
-                    <!-- Member 2: Kristína Kovačiková -->
+                    <!-- Member 2 -->
                     <div class="member-card">
-                        <div class="member-img">
+                        <div class="member-avatar">
                             <img src="image1.png" alt="Kristína Kovačiková">
                         </div>
-                        <div class="member-info">
+                        <div class="member-header">
                             <h3>Kristína Kovačiková</h3>
                             <span class="role">ACCOUNT EXECUTIVE</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
                             <p class="bio">Ako pravá ruka CEO sa aktívne podieľa na realizácii projektov a zastrešuje
                                 grafické výstupy. Študuje marketingovú komunikáciu na Univerzite Konštantína Filozofa v
                                 Nitre, čím prepája teóriu s praxou. Jej silnými stránkami sú komunikatívnosť,
@@ -245,14 +514,17 @@
                         </div>
                     </div>
 
-                    <!-- Member 3: Nina Lešková -->
+                    <!-- Member 3 -->
                     <div class="member-card">
-                        <div class="member-img">
+                        <div class="member-avatar">
                             <img src="image2.png" alt="Nina Lešková">
                         </div>
-                        <div class="member-info">
+                        <div class="member-header">
                             <h3>Nina Lešková</h3>
                             <span class="role">ACCOUNT EXECUTIVE</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
                             <p class="bio">Zabezpečuje plynulú komunikáciu s klientmi a podporuje realizáciu kľúčových
                                 projektov. Popri práci študuje ekonómiu a marketing na Slovenskej poľnohospodárskej
                                 univerzite v Nitre. Do tímu prináša pozitívny a zároveň racionálny prístup, je
@@ -260,14 +532,17 @@
                         </div>
                     </div>
 
-                    <!-- Member 4: Liliana Polaková -->
+                    <!-- Member 4 -->
                     <div class="member-card">
-                        <div class="member-img">
+                        <div class="member-avatar">
                             <img src="image3.png" alt="Liliana Polaková">
                         </div>
-                        <div class="member-info">
+                        <div class="member-header">
                             <h3>Liliana Polaková</h3>
                             <span class="role">SOCIAL MEDIA MANAGER</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
                             <p class="bio">Zodpovedá za stratégiu a správu sociálnych sietí s preukázateľnými
                                 skúsenosťami, napríklad pre Hotel Janosík. Študuje manažment na Univerzite Cyrila a
                                 Metoda v Trnave. Je kreatívnym motorom tímu, do ktorého vnáša energiu, zábavu a podporu.
@@ -277,12 +552,15 @@
 
                     <!-- Member 5 -->
                     <div class="member-card">
-                        <div class="member-img">
+                        <div class="member-avatar">
                             <img src="image4.png" alt="Simona Lopošová">
                         </div>
-                        <div class="member-info">
+                        <div class="member-header">
                             <h3>Simona Lopošová</h3>
                             <span class="role">CONTENT & COMMUNICATION COORDINATOR</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
                             <p class="bio">Špecializuje sa na copywriting, grafiku a komunikáciu s klientmi. Má
                                 praktické skúsenosti s natáčaním, fotografovaním a vďaka výbornej angličtine aj s
                                 doučovaním. Študuje marketing na Univerzite Cyrila a Metoda v Trnave a do práce vnáša
@@ -351,11 +629,6 @@
 
                     <div class="footer-bottom">
                         <div class="copyright">&copy; 2025 Bold Media. All rights reserved.</div>
-                        <div class="socials">
-                            <a href="#">Instagram</a>
-                            <a href="#">LinkedIn</a>
-                            <a href="#">Facebook</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -403,6 +676,179 @@
                     submitBtn.innerHTML = originalBtnText;
                 });
         });
+    </script>
+
+    <!-- Horizontálny posuvník ovládanie -->
+    <script>
+        const slider = document.querySelector('.team-slider');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        prevBtn.addEventListener('click', () => {
+            slider.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            slider.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+    </script>
+
+    <script>
+        // Team card expand/collapse - bez tlačidla
+        document.querySelectorAll('.member-card').forEach(card => {
+            card.addEventListener('click', function () {
+                this.classList.toggle('expanded');
+            });
+        });
+    </script>
+
+    <script>
+        // Dynamická animácia SVG v hero sekcii
+        function animateWaves() {
+            const wave1 = document.getElementById('wave1');
+            const wave2 = document.getElementById('wave2');
+            const pulse = document.getElementById('pulse');
+            let t = 0;
+            function animate() {
+                t += 0.03;
+                // Animate wave1
+                const q1 = 120 + Math.sin(t) * 25;
+                const q2 = 170 + Math.cos(t) * 25;
+                wave1.setAttribute('d', `M0,170 Q85,${q1} 170,${q2} T340,170`);
+                // Animate wave2
+                const q3 = 250 + Math.cos(t + 1) * 18;
+                const q4 = 200 + Math.sin(t + 1) * 18;
+                wave2.setAttribute('d', `M0,200 Q85,${q3} 170,${q4} T340,200`);
+                // Animate pulse
+                const r = 38 + Math.sin(t * 2) * 6;
+                pulse.setAttribute('r', r);
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        if (document.getElementById('wave1')) animateWaves();
+    </script>
+
+    <script>
+        // Dynamická animácia orbitujúcich bodov v hero sekcii
+        function animateOrbit() {
+            const svg = document.getElementById('orbit-svg');
+            if (!svg) return;
+            const dot1 = document.getElementById('dot1');
+            const dot2 = document.getElementById('dot2');
+            const dot3 = document.getElementById('dot3');
+            const dot4 = document.getElementById('dot4');
+            let t = 0;
+            function animate() {
+                t += 0.02;
+                // Dot1 - veľký orbit
+                let angle1 = t;
+                dot1.setAttribute('cx', 170 + Math.cos(angle1) * 90);
+                dot1.setAttribute('cy', 170 + Math.sin(angle1) * 90);
+                // Dot2 - menší orbit
+                let angle2 = t * 1.5;
+                dot2.setAttribute('cx', 170 + Math.cos(angle2) * 50);
+                dot2.setAttribute('cy', 170 + Math.sin(angle2) * 50);
+                // Dot3 - veľký orbit, posunutý
+                let angle3 = t + Math.PI / 2;
+                dot3.setAttribute('cx', 170 + Math.cos(angle3) * 90);
+                dot3.setAttribute('cy', 170 + Math.sin(angle3) * 90);
+                // Dot4 - menší orbit, posunutý
+                let angle4 = t + Math.PI;
+                dot4.setAttribute('cx', 170 + Math.cos(angle4) * 50);
+                dot4.setAttribute('cy', 170 + Math.sin(angle4) * 50);
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        if (document.getElementById('orbit-svg')) animateOrbit();
+    </script>
+
+    <script>
+        // Enhanced animation for the graphic element
+        function animateBMPulse() {
+            const circle = document.getElementById('bmPulseCircle');
+            const outerRing = document.getElementById('outerRing');
+            const middleRing = document.getElementById('middleRing');
+            const particle1 = document.getElementById('particle1');
+            const particle2 = document.getElementById('particle2');
+            const particle3 = document.getElementById('particle3');
+            const particle4 = document.getElementById('particle4');
+
+            if (!circle) return;
+
+            let t = 0;
+            function animate() {
+                t += 0.02;
+
+                // Pulsing inner circle
+                const r = 60 + Math.sin(t * 1.5) * 8;
+                circle.setAttribute('r', r);
+                circle.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t)) * 0.2);
+
+                // Rotating outer ring
+                if (outerRing) {
+                    const outerR = 120 + Math.sin(t * 0.8) * 5;
+                    outerRing.setAttribute('r', outerR);
+                    outerRing.setAttribute('opacity', 0.3 + Math.abs(Math.sin(t * 0.5)) * 0.2);
+                }
+
+                // Rotating middle ring (opposite direction)
+                if (middleRing) {
+                    const middleR = 90 + Math.cos(t * 1.2) * 4;
+                    middleRing.setAttribute('r', middleR);
+                    middleRing.setAttribute('opacity', 0.5 + Math.abs(Math.cos(t * 0.7)) * 0.2);
+                }
+
+                // Orbiting particles
+                if (particle1) {
+                    const angle1 = t;
+                    particle1.setAttribute('cx', 200 + Math.cos(angle1) * 120);
+                    particle1.setAttribute('cy', 200 + Math.sin(angle1) * 120);
+                    particle1.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 2)) * 0.4);
+                }
+
+                if (particle2) {
+                    const angle2 = t + Math.PI;
+                    particle2.setAttribute('cx', 200 + Math.cos(angle2) * 120);
+                    particle2.setAttribute('cy', 200 + Math.sin(angle2) * 120);
+                    particle2.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 2 + Math.PI)) * 0.4);
+                }
+
+                if (particle3) {
+                    const angle3 = t * 1.3;
+                    particle3.setAttribute('cx', 200 + Math.cos(angle3) * 90);
+                    particle3.setAttribute('cy', 200 + Math.sin(angle3) * 90);
+                    particle3.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 1.8)) * 0.4);
+                }
+
+                if (particle4) {
+                    const angle4 = t * 1.3 + Math.PI;
+                    particle4.setAttribute('cx', 200 + Math.cos(angle4) * 90);
+                    particle4.setAttribute('cy', 200 + Math.sin(angle4) * 90);
+                    particle4.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 1.8 + Math.PI)) * 0.4);
+                }
+
+                // Yellow accent particles - smaller orbits
+                if (particle5) {
+                    const angle5 = t * 2;
+                    particle5.setAttribute('cx', 200 + Math.cos(angle5) * 45);
+                    particle5.setAttribute('cy', 200 + Math.sin(angle5) * 45);
+                    particle5.setAttribute('opacity', 0.7 + Math.abs(Math.sin(t * 3)) * 0.3);
+                }
+
+                if (particle6) {
+                    const angle6 = t * 2 + Math.PI;
+                    particle6.setAttribute('cx', 200 + Math.cos(angle6) * 45);
+                    particle6.setAttribute('cy', 200 + Math.sin(angle6) * 45);
+                    particle6.setAttribute('opacity', 0.7 + Math.abs(Math.sin(t * 3 + Math.PI)) * 0.3);
+                }
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        if (document.getElementById('bmPulseCircle')) animateBMPulse();
     </script>
 </body>
 
