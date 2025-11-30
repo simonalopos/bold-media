@@ -1,9 +1,66 @@
 // GSAP Animations
 gsap.registerPlugin(ScrollTrigger);
 
-// Custom Cursor
+// Custom Cursor with Liquid Trail
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
+
+// Particle Trail System
+class CursorParticle {
+    constructor(x, y, vx, vy) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.life = 1;
+        this.decay = 0.02;
+        this.size = Math.random() * 4 + 2;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.95; // Friction
+        this.vy *= 0.95;
+        this.life -= this.decay;
+    }
+
+    draw(ctx) {
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+        gradient.addColorStop(0, `rgba(0, 102, 255, ${this.life})`);
+        gradient.addColorStop(0.5, `rgba(77, 148, 255, ${this.life * 0.5})`);
+        gradient.addColorStop(1, `rgba(0, 191, 255, 0)`);
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+const particles = [];
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+// Create canvas for particle trail
+const trailCanvas = document.createElement('canvas');
+trailCanvas.style.position = 'fixed';
+trailCanvas.style.top = '0';
+trailCanvas.style.left = '0';
+trailCanvas.style.width = '100%';
+trailCanvas.style.height = '100%';
+trailCanvas.style.pointerEvents = 'none';
+trailCanvas.style.zIndex = '9998';
+document.body.appendChild(trailCanvas);
+
+const ctx = trailCanvas.getContext('2d');
+trailCanvas.width = window.innerWidth;
+trailCanvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+    trailCanvas.width = window.innerWidth;
+    trailCanvas.height = window.innerHeight;
+});
 
 if (cursorDot && cursorOutline) {
     window.addEventListener('mousemove', (e) => {
@@ -17,6 +74,25 @@ if (cursorDot && cursorOutline) {
             left: `${posX}px`,
             top: `${posY}px`
         }, { duration: 500, fill: "forwards" });
+
+        // Create particles based on velocity
+        const vx = (posX - lastMouseX) * 0.1;
+        const vy = (posY - lastMouseY) * 0.1;
+        const speed = Math.sqrt(vx * vx + vy * vy);
+
+        if (speed > 0.5) {
+            for (let i = 0; i < 2; i++) {
+                particles.push(new CursorParticle(
+                    posX + (Math.random() - 0.5) * 10,
+                    posY + (Math.random() - 0.5) * 10,
+                    -vx + (Math.random() - 0.5) * 2,
+                    -vy + (Math.random() - 0.5) * 2
+                ));
+            }
+        }
+
+        lastMouseX = posX;
+        lastMouseY = posY;
     });
 
     // Navigation Hover Effect
@@ -31,6 +107,25 @@ if (cursorDot && cursorOutline) {
         });
     });
 }
+
+// Animate particles
+function animateParticles() {
+    ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw(ctx);
+
+        if (particles[i].life <= 0) {
+            particles.splice(i, 1);
+        }
+    }
+
+    requestAnimationFrame(animateParticles);
+}
+
+animateParticles();
+
 
 // Hero Text Animation
 const heroLines = document.querySelectorAll('.hero-title .line');
@@ -53,21 +148,216 @@ gsap.from('.hero-desc', {
     delay: 1.2
 });
 
-// Scroll Animations
-const sections = document.querySelectorAll('section');
-sections.forEach(section => {
-    gsap.from(section, {
+// Advanced Scroll Animations with Directional Reveals
+// Service Cards - Animations disabled per user request
+// gsap.from('.service-card', {
+//     scrollTrigger: {
+//         trigger: '.services-grid',
+//         start: "top 80%",
+//         toggleActions: "play none none reverse"
+//     },
+//     y: 100,
+//     opacity: 0,
+//     duration: 0.8,
+//     stagger: 0.2,
+//     ease: "power3.out"
+// });
+
+
+// Team Cards - Slide in from alternating sides
+const teamCards = document.querySelectorAll('.member-card');
+teamCards.forEach((card, index) => {
+    gsap.from(card, {
         scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
+            trigger: card,
+            start: "top 85%",
             toggleActions: "play none none reverse"
         },
-        y: 50,
+        x: index % 2 === 0 ? -100 : 100,
         opacity: 0,
-        duration: 1,
+        duration: 0.8,
         ease: "power3.out"
     });
 });
+
+// Process Steps - Slide in from left
+gsap.from('.timeline-step', {
+    scrollTrigger: {
+        trigger: '.process-timeline',
+        start: "top 80%",
+        toggleActions: "play none none reverse"
+    },
+    x: -100,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.3,
+    ease: "power3.out"
+});
+
+// Section Headers - Fade in
+gsap.from('.section-header', {
+    scrollTrigger: {
+        trigger: '.section-header',
+        start: "top 85%",
+        toggleActions: "play none none reverse"
+    },
+    y: 50,
+    opacity: 0,
+    duration: 1,
+    ease: "power3.out"
+});
+
+// Parallax Effect for Process Image
+gsap.to('.process-image', {
+    scrollTrigger: {
+        trigger: '.process-image',
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1
+    },
+    y: -50,
+    ease: "none"
+});
+
+// Button Micro-interactions
+// Ripple Effect on Click
+document.querySelectorAll('.btn-cta, .obsidian-btn').forEach(button => {
+    button.addEventListener('click', function (e) {
+        this.classList.remove('ripple');
+        void this.offsetWidth; // Trigger reflow
+        this.classList.add('ripple');
+
+        setTimeout(() => {
+            this.classList.remove('ripple');
+        }, 600);
+    });
+});
+
+// Magnetic Attraction to Buttons
+const buttons = document.querySelectorAll('.btn-cta, .nav-link');
+buttons.forEach(button => {
+    button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        button.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.05)`;
+    });
+
+    button.addEventListener('mouseleave', () => {
+        button.style.transform = 'translate(0, 0) scale(1)';
+    });
+});
+
+// Enhanced Navigation Scroll Behavior
+const nav = document.querySelector('.glass-nav');
+let lastScrollY = window.scrollY;
+let ticking = false;
+
+function updateNav() {
+    const scrollY = window.scrollY;
+
+    // Add scrolled class when scrolled past 100px
+    if (scrollY > 100) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+
+    // Hide on scroll down, show on scroll up
+    if (scrollY > lastScrollY && scrollY > 200) {
+        nav.classList.add('hidden');
+    } else {
+        nav.classList.remove('hidden');
+    }
+
+    lastScrollY = scrollY;
+    ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(updateNav);
+        ticking = true;
+    }
+});
+
+// Active Link Tracking
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link:not(.btn-cta)');
+
+function setActiveLink() {
+    let current = '';
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+
+        if (window.scrollY >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', setActiveLink);
+setActiveLink(); // Set initial active link
+
+
+// Service Cards - Magnetic Hover & 3D Tilt Effect
+const serviceCards = document.querySelectorAll('.service-card');
+
+serviceCards.forEach(card => {
+    let bounds;
+
+    card.addEventListener('mouseenter', () => {
+        bounds = card.getBoundingClientRect();
+    });
+
+    card.addEventListener('mousemove', (e) => {
+        if (!bounds) return;
+
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        const leftX = mouseX - bounds.x;
+        const topY = mouseY - bounds.y;
+        const center = {
+            x: leftX - bounds.width / 2,
+            y: topY - bounds.height / 2
+        };
+        const distance = Math.sqrt(center.x ** 2 + center.y ** 2);
+
+        // 3D Tilt Effect
+        const rotateX = (center.y / bounds.height) * -15; // Max 15deg tilt
+        const rotateY = (center.x / bounds.width) * 15;
+
+        card.style.transform = `
+            perspective(1000px)
+            rotateX(${rotateX}deg)
+            rotateY(${rotateY}deg)
+            translateY(-10px)
+            scale(1.02)
+        `;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = `
+            perspective(1000px)
+            rotateX(0deg)
+            rotateY(0deg)
+            translateY(0)
+            scale(1)
+        `;
+        bounds = null;
+    });
+});
+
 
 // Smooth Scroll (Lenis)
 const lenis = new Lenis({
@@ -289,6 +579,32 @@ if (container) {
     }
 
     animate();
+
+    // Parallax Effect for Hero Particles
+    let scrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+    });
+
+    // Update particle position based on scroll in animation loop
+    const originalAnimate = animate;
+    function animateWithParallax() {
+        requestAnimationFrame(animateWithParallax);
+        const elapsedTime = clock.getElapsedTime();
+
+        material.uniforms.uTime.value = elapsedTime;
+        material.uniforms.uMouse.value.lerp(mouse, 0.1); // Smooth mouse
+
+        // Parallax effect - move particles slower than scroll
+        particles.position.y = scrollY * 0.0005;
+        particles.rotation.y = scrollY * 0.0001;
+
+        composer.render();
+    }
+
+    // Replace original animate with parallax version
+    animateWithParallax();
 
     // Resize
     window.addEventListener('resize', () => {
