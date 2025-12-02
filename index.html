@@ -1,283 +1,732 @@
 <!DOCTYPE html>
 <html lang="sk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOLD MEDIA | Strategický partner pre váš mediálny rast</title>
+    <title>BOLD MEDIA | Future of Digital</title>
+    <meta name="description" content="Prémiová digitálna agentúra. Premieňame vízie na digitálnu realitu.">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;500;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Core CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+
+    <!-- Upravené štýly pre sekciu TÍM -->
     <style>
-        /* Pridané štýly pre správy formulára */
-        #form-status {
-            margin-top: 15px;
-            font-weight: 500;
+        #team {
+            padding: 120px 0;
+            background: linear-gradient(120deg, #101a3c 0%, #050a18 100%);
+            color: #e6e9ee;
+        }
+
+        #team .section-header {
+            text-align: left;
+            margin-bottom: 60px;
+        }
+
+        #team .section-header .section-label {
+            display: inline-block;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+
+        #team .section-header .section-title {
+            color: #fff;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .member-card {
+            background: linear-gradient(135deg, rgba(13, 71, 161, 0.05), rgba(13, 71, 161, 0.02));
+            border: 1px solid rgba(13, 71, 161, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(2, 6, 23, 0.5);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .member-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(13, 71, 161, 0.4);
+            box-shadow: 0 15px 50px rgba(13, 71, 161, 0.2);
+        }
+
+        .member-avatar {
+            width: 100%;
+            height: 340px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s ease;
+        }
+
+        .member-card:hover .member-avatar img {
+            transform: scale(1.05);
+        }
+
+        .member-header {
+            padding: 20px 25px;
+            text-align: center;
+        }
+
+        .member-header h3 {
+            margin: 0 0 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .member-header .role {
+            font-size: 0.85rem;
+            color: #0d47a1;
+            margin-bottom: 0;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .member-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 25px;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s ease;
+        }
+
+        .member-card:hover .member-content {
+            max-height: 500px;
+            padding: 20px 25px;
+        }
+
+        .member-content .bio {
+            font-size: 0.9rem;
+            color: #cbd5df;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .member-indicator {
             display: none;
-            padding: 10px;
-            border-radius: 4px;
         }
-        .status-success { 
-            color: #155724; 
-            background-color: #d4edda; 
-            border: 1px solid #c3e6cb;
+
+        @media (max-width: 768px) {
+            #team .section-header .section-title {
+                font-size: 2rem;
+            }
+
+            .member-card {
+                border-radius: 16px;
+            }
+
+            .member-avatar {
+                height: 300px;
+            }
+
+            .member-header {
+                padding: 18px 20px;
+            }
         }
-        .status-error { 
-            color: #721c24; 
-            background-color: #f8d7da; 
-            border: 1px solid #f5c6cb;
+
+        /* ...existing styles... */
+
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            background: #111a36;
+            overflow: hidden;
         }
-        /* Načítavacia animácia pre tlačidlo */
-        .btn-loading {
-            opacity: 0.7;
-            cursor: wait;
+
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 2;
+        }
+
+        .hero-visual {
+            flex: 1;
+            position: relative;
+            min-width: 350px;
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        /* Nový SVG grafický prvok */
+        .media-orbit {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 340px;
+            height: 340px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        @media (max-width: 900px) {
+            .hero-container {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .hero-visual {
+                min-width: 100%;
+                min-height: 220px;
+                justify-content: center;
+            }
+
+            .media-orbit {
+                position: static;
+                transform: none;
+                margin: 0 auto;
+                width: 220px;
+                height: 220px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <header id="main-header">
-        <nav class="container">
-            <a href="#" class="logo">
-                <img src="logo.png" alt="Bold Media Logo">
-            </a>
-            <ul class="nav-links">
-                <li><a href="#process">Náš prístup</a></li>
-                <li><a href="#team">Náš tím</a></li>
-                <li><a href="#contact" class="cta-button">Bezplatná konzultácia</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- 3D Background Canvas -->
+    <canvas id="webgl"></canvas>
 
-    <main>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <img src="logo.png" alt="BOLD MEDIA">
+            </a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="#services" class="nav-link" data-text="Služby">Služby</a>
+                <a href="#process" class="nav-link" data-text="Proces">Proces</a>
+                <a href="#team" class="nav-link" data-text="Tím">Tím</a>
+                <a href="#contact" class="nav-link btn-cta">Bezplatný media plán</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Smooth Scroll Wrapper -->
+    <main id="smooth-wrapper">
+
+        <!-- Hero Section -->
         <section id="hero">
-            <canvas id="particle-canvas"></canvas>
-            <div class="container hero-content">
-                <h1 class="reveal-text">Strategický partner pre váš mediálny rast.</h1>
-                <p class="fade-in-up">Pomáhame značkám rásť prostredníctvom mediálnej distribúcie, ktorá prináša merateľné výsledky a buduje jedinečnú pozíciu na trhu.</p>
-                <a href="#contact" class="cta-button-main fade-in-up">Vytvorenie bezplatného media plánu</a>
-            </div>
-            <a href="#process" class="hero-arrow" aria-label="Posuňte sa nadol">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 5v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </a>
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <div class="line">NESLEDUJEME</div>
+                        <div class="line">TRENDY.</div>
+                        <div class="line hollow">MY ICH</div>
+                        <div class="line"><span class="gradient-text">TVORÍME.</span></div>
+                    </h1>
+                    <p class="hero-desc">
+                        Pomáhame značkám rásť prostredníctvom mediálnej distribúcie, ktorá prináša merateľné výsledky a
+                        buduje jedinečnú pozíciu na trhu.
+                    </p>
+                </div>
+
+                <div class="hero-visual">
+                    <div id="hero-canvas-container"></div>
+                    <script>
+                        // Three.js Hero Visual - Reply.ai Style (Abstract Network/Brain)
+                        (function () {
+                            const container = document.getElementById('hero-canvas-container');
+                            if (!container) return;
+
+                            const scene = new THREE.Scene();
+                            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+                            renderer.setSize(container.clientWidth, container.clientHeight);
+                            renderer.setPixelRatio(window.devicePixelRatio);
+                            container.appendChild(renderer.domElement);
+
+                            // Particles
+                            const particlesGeometry = new THREE.BufferGeometry();
+                            const particlesCount = 700;
+                            const posArray = new Float32Array(particlesCount * 3);
+
+                            for (let i = 0; i < particlesCount * 3; i++) {
+                                posArray[i] = (Math.random() - 0.5) * 5; // Spread
+                            }
+
+                            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+                            // Material
+                            const material = new THREE.PointsMaterial({
+                                size: 0.02,
+                                color: 0x4d94ff, // Light Blue
+                                transparent: true,
+                                opacity: 0.8,
+                            });
+
+                            // Mesh
+                            const particlesMesh = new THREE.Points(particlesGeometry, material);
+                            scene.add(particlesMesh);
+
+                            // Connecting Lines (Plexus) - Simplified for performance
+                            // We will use a separate LineSegments object for connections
+                            // But for a true Reply.ai look, a "Sphere" of nodes is better.
+
+                            // Let's create a Sphere of nodes instead of random cloud
+                            const sphereGeo = new THREE.IcosahedronGeometry(1.8, 2);
+                            const sphereMat = new THREE.MeshBasicMaterial({
+                                color: 0x1565c0,
+                                wireframe: true,
+                                transparent: true,
+                                opacity: 0.15
+                            });
+                            const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+                            scene.add(sphere);
+
+                            // Add particles to vertices of the sphere
+                            const sphereParticlesGeo = new THREE.BufferGeometry();
+                            const sphereVerts = sphereGeo.attributes.position.array;
+                            sphereParticlesGeo.setAttribute('position', new THREE.BufferAttribute(sphereVerts, 3));
+                            const sphereParticlesMat = new THREE.PointsMaterial({
+                                size: 0.04,
+                                color: 0xffd700, // Gold accents
+                                transparent: true,
+                                opacity: 0.8
+                            });
+                            const sphereParticles = new THREE.Points(sphereParticlesGeo, sphereParticlesMat);
+                            scene.add(sphereParticles);
+
+                            // Inner Core
+                            const coreGeo = new THREE.IcosahedronGeometry(0.8, 1);
+                            const coreMat = new THREE.MeshBasicMaterial({
+                                color: 0x0066FF,
+                                wireframe: true,
+                                transparent: true,
+                                opacity: 0.3
+                            });
+                            const core = new THREE.Mesh(coreGeo, coreMat);
+                            scene.add(core);
+
+                            // Lighting
+                            const pointLight = new THREE.PointLight(0xffffff, 1);
+                            pointLight.position.set(2, 3, 4);
+                            scene.add(pointLight);
+
+                            camera.position.z = 4;
+
+                            // Mouse Interaction
+                            let mouseX = 0;
+                            let mouseY = 0;
+                            let targetX = 0;
+                            let targetY = 0;
+
+                            const windowHalfX = container.clientWidth / 2;
+                            const windowHalfY = container.clientHeight / 2;
+
+                            document.addEventListener('mousemove', (event) => {
+                                mouseX = (event.clientX - windowHalfX);
+                                mouseY = (event.clientY - windowHalfY);
+                            });
+
+                            // Animation Loop
+                            const clock = new THREE.Clock();
+
+                            function animate() {
+                                targetX = mouseX * 0.001;
+                                targetY = mouseY * 0.001;
+
+                                const elapsedTime = clock.getElapsedTime();
+
+                                // Rotate entire system
+                                sphere.rotation.y += 0.002;
+                                sphere.rotation.x += 0.001;
+                                sphereParticles.rotation.y += 0.002;
+                                sphereParticles.rotation.x += 0.001;
+
+                                core.rotation.y -= 0.005;
+                                core.rotation.x -= 0.002;
+
+                                // Gentle float
+                                sphere.position.y = Math.sin(elapsedTime * 0.5) * 0.1;
+                                sphereParticles.position.y = Math.sin(elapsedTime * 0.5) * 0.1;
+                                core.position.y = Math.sin(elapsedTime * 0.5) * 0.1;
+
+                                // Mouse interaction easing
+                                sphere.rotation.y += 0.05 * (targetX - sphere.rotation.y);
+                                sphere.rotation.x += 0.05 * (targetY - sphere.rotation.x);
+
+                                renderer.render(scene, camera);
+                                requestAnimationFrame(animate);
+                            }
+
+                            animate();
+
+                            // Handle Resize
+                            window.addEventListener('resize', () => {
+                                camera.aspect = container.clientWidth / container.clientHeight;
+                                camera.updateProjectionMatrix();
+                                renderer.setSize(container.clientWidth, container.clientHeight);
+                            });
+                        })();
+                    </script>
+                </div>
+
         </section>
 
-        <!-- === NOVÁ PROFESIONÁLNA SEKICA SLUŽIEB === -->
-        <section id="services-interactive">
-            <canvas id="services-particle-canvas" aria-hidden="true"></canvas>
+        <!-- Marquee Section -->
+        <div class="marquee-section">
+            <div class="marquee-content">
+                <span>STRATÉGIA &bull; VÝKON &bull; KREATIVITA &bull; DÁTA &bull; VÝSLEDKY &bull;</span>
+                <span>STRATÉGIA &bull; VÝKON &bull; KREATIVITA &bull; DÁTA &bull; VÝSLEDKY &bull;</span>
+            </div>
+        </div>
+
+        <!-- Services Section (Grid) -->
+        <section id="services">
             <div class="container">
-                <div class="services-header">
-                    <div class="sub-heading">NAŠE SLUŽBY</div>
-                    <h2 class="section-title">Kampane s merateľným dopadom.</h2>
-                    <p class="section-intro">Náš prístup je komplexný. Pokrývame celý cyklus mediálnej komunikácie – od prvotnej analýzy až po neustálu optimalizáciu. Sme partner, ktorý premieňa vaše ciele na merateľný úspech.</p>
+                <div class="section-header">
+                    <span class="section-label">NAŠE SLUŽBY</span>
+                    <h2 class="section-title">Kampane s <span class="gradient-text">merateľným dopadom</span></h2>
+                    <p class="section-desc">Náš prístup je komplexný. Pokrývame celý cyklus mediálnej komunikácie – od
+                        prvotnej analýzy až po neustálu optimalizáciu. Sme partner, ktorý premieňa vaše ciele na
+                        merateľný úspech.</p>
                 </div>
 
-                <div class="service-galaxy">
-                    <!-- Karta 1: Plánovanie -->
-                    <div class="service-card-wrapper">
-                        <div class="service-card" style="--bg-image: url('plan.png');">
-                            <div class="card-content">
-                                <p>Nájdeme najefektívnejšiu cestu k vašim zákazníkom. Od precízneho cielenia v RTB sieťach až po nákup priestoru v televízii – optimalizujeme rozpočty pre maximálny zásah.</p>
-                            </div>
+                <div class="services-grid">
+                    <!-- Item 1 -->
+                    <div class="service-card">
+                        <div class="card-image">
+                            <img src="data.jpg" alt="Mediálne plánovanie a nákup">
                         </div>
-                        <h3 class="service-card-title">Mediálne plánovanie a nákup</h3>
+                        <div class="card-content">
+                            <span class="num">01</span>
+                            <h3>Mediálne plánovanie a nákup</h3>
+                            <p>Nájdeme najefektívnejšiu cestu k vašim zákazníkom. Od precízneho cielenia v RTB sieťach
+                                až po nákup priestoru v televízii – optimalizujeme rozpočty pre maximálny zásah.</p>
+                        </div>
                     </div>
 
-                    <!-- Karta 2: Stratégia -->
-                    <div class="service-card-wrapper">
-                        <div class="service-card" style="--bg-image: url('strategy.jpg');">
-                            <div class="card-content">
-                                <p>Budujeme stratégie s jasným cieľom - rast. Každé investované euro musí prinášať návratnosť. Naše kampane sú riadené dátami a nekompromisne optimalizované na výkon.</p>
-                            </div>
+                    <!-- Item 2 -->
+                    <div class="service-card">
+                        <div class="card-image">
+                            <img src="brand.png" alt="Digitálna stratégia a výkon">
                         </div>
-                        <h3 class="service-card-title">Digitálna stratégia a výkon</h3>
+                        <div class="card-content">
+                            <span class="num">02</span>
+                            <h3>Digitálna stratégia a výkon</h3>
+                            <p>Budujeme stratégie s jasným cieľom - rast. Každé investované euro musí prinášať
+                                návratnosť. Naše kampane sú riadené dátami a nekompromisne optimalizované na výkon.</p>
+                        </div>
                     </div>
-                    
-                    <!-- Karta 3: Povedomie -->
-                    <div class="service-card-wrapper">
-                        <div class="service-card" style="--bg-image: url('brand.png');">
-                            <div class="card-content">
-                                <p>Dostaneme vašu značku do povedomia. Budujeme silné a zapamätateľné brandy prostredníctvom kampaní, ktoré rezonujú s publikom a vytvárajú dlhodobú hodnotu.</p>
-                            </div>
+
+                    <!-- Item 3 -->
+                    <div class="service-card">
+                        <div class="card-image">
+                            <img src="section2.jpg" alt="Brand awareness">
                         </div>
-                        <h3 class="service-card-title">Brand awareness</h3>
+                        <div class="card-content">
+                            <span class="num">03</span>
+                            <h3>Brand awareness</h3>
+                            <p>Dostaneme vašu značku do povedomia. Budujeme silné a zapamätateľné brandy prostredníctvom
+                                kampaní, ktoré rezonujú s publikom a vytvárajú dlhodobú hodnotu.</p>
+                        </div>
                     </div>
-                    
-                    <!-- Karta 4: Optimalizácia -->
-                    <div class="service-card-wrapper">
-                        <div class="service-card" style="--bg-image: url('data.jpg');">
-                            <div class="card-content">
-                                <p>Dáta sú naším kompasom. Všetko meriame, analyzujeme a vyhodnocujeme. Pripravíme vám transparentné reporty a na ich základe neustále vylepšujeme stratégiu.</p>
-                            </div>
+
+                    <!-- Item 4 -->
+                    <div class="service-card">
+                        <div class="card-image">
+                            <img src="strategy.jpg" alt="Dátová analýza a optimalizácia">
                         </div>
-                        <h3 class="service-card-title">Dátová analýza a optimalizácia</h3>
+                        <div class="card-content">
+                            <span class="num">04</span>
+                            <h3>Dátová analýza a optimalizácia</h3>
+                            <p>Dáta sú naším kompasom. Všetko meriame, analyzujeme a vyhodnocujeme. Pripravíme vám
+                                transparentné reporty a na ich základe neustále vylepšujeme stratégiu.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- === KONIEC NOVEJ SEKCIE === -->
 
+        <!-- Process Section (Vertical Timeline) -->
         <section id="process">
-            <div class="container process-container">
-                <div class="process-text">
-                    <div class="sub-heading">AKO PRACUJEME</div>
-                    <h2 class="section-title">Od stratégie k výsledkom.</h2>
-                    <p class="section-intro">Náš úspech je postavený na overenom procese, ktorý kombinuje hĺbkovú analýzu, precíznu exekúciu a neustálu optimalizáciu. Toto sú piliere, na ktorých staviame váš rast.</p>
-                    
-                    <div class="process-steps">
-                        <div class="step animate-on-scroll">
-                            <h3><span>01</span> Analýza, Dáta a Stratégia</h3>
-                            <p>Poznáme vašu značku, publikum aj konkurenciu. Na základe dát stanovíme ciele a jasnú stratégiu s merateľnými KPI.</p>
-                        </div>
-                        <div class="step animate-on-scroll">
-                            <h3><span>02</span> Mediálne plánovanie a realizácia</h3>
-                            <p>Navrhneme efektívny media mix a poctivo zrealizujeme kampane naprieč kanálmi tak, aby rozpočet prinášal čo najvyšší výkon.</p>
-                        </div>
-                        <div class="step animate-on-scroll">
-                            <h3><span>03</span> Vyhodnocovanie a optimalizácia</h3>
-                            <p>Transparentne reportujeme výsledky a priebežne optimalizujeme cielenie, kreatívy aj investície pre dlhodobý rast.</p>
-                        </div>
-                    </div>
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">AKO PRACUJEME</span>
+                    <h2 class="section-title">Od stratégie k <span class="gradient-text">výsledkom</span></h2>
+                    <p class="section-desc">Náš úspech je postavený na overenom procese, ktorý kombinuje hĺbkovú
+                        analýzu, precíznu exekúciu a neustálu optimalizáciu. Toto sú piliere, na ktorých staviame váš
+                        rast.</p>
                 </div>
-                <div class="process-visual animate-on-scroll">
-                    <img src="section2.jpg" alt="Grafy a analýza dát – vertikálne zobrazenie">
-                </div>
-            </div>
-        </section>
 
-        <section id="team" class="dark-section">
-            <div class="container team-container">
-                <div class="team-visual">
-                    <div class="visual-wrapper">
-                        <img src="image5.png" alt="Fotografia Lukáš Bednár" class="team-image is-active" id="img-lukas">
-                        <img src="image1.png" alt="Fotografia Kristína Kovačiková" class="team-image" id="img-kristina">
-                        <img src="image2.png" alt="Fotografia Nina Lešková" class="team-image" id="img-nina">
-                        <img src="image3.png" alt="Fotografia Liliana Polaková" class="team-image" id="img-liliana">
-                        <img src="image4.png" alt="Fotografia Simona Lopošová" class="team-image" id="img-simona">
+                <div class="process-layout">
+                    <div class="process-timeline">
+                        <!-- Step 1 -->
+                        <div class="timeline-step">
+                            <div class="step-num">01</div>
+                            <div class="step-content">
+                                <h3>Analýza, Dáta a Stratégia</h3>
+                                <p>Poznáme vašu značku, publikum aj konkurenciu. Na základe dát stanovíme ciele a jasnú
+                                    stratégiu s merateľnými KPI.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="timeline-step">
+                            <div class="step-num">02</div>
+                            <div class="step-content">
+                                <h3>Mediálne plánovanie a realizácia</h3>
+                                <p>Navrhneme efektívny media mix a poctivo zrealizujeme kampane naprieč kanálmi tak, aby
+                                    rozpočet prinášal čo najvyšší výkon.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="timeline-step last-step">
+                            <div class="step-num">03</div>
+                            <div class="step-content">
+                                <h3>Vyhodnocovanie a optimalizácia</h3>
+                                <p>Transparentne reportujeme výsledky a priebežne optimalizujeme cielenie, kreatívy aj
+                                    investície pre dlhodobý rast.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="team-descriptions">
-                    <div class="sub-heading">EXPERTÍZA A VÁŠEŇ</div>
-                    <h2 class="section-title">Zoznámte sa s naším tímom.</h2>
-                    
-                    <div class="team-member-bio" data-image-id="img-lukas">
-                        <h3>Lukáš Bednár</h3>
-                        <h4>CEO BOLD MEDIA</h4>
-                        <ul>
-                            <li>Strategicky vedie spolupráce s najväčšími značkami a reklamnými agentúrami na trhu.</li>
-                            <li>Bývalý šéf obchodného oddelenia v News & Media Holding s riadeným obratom <strong>30 mil. €</strong>.</li>
-                            <li>Ako <strong>certifikovaný Google Trainer</strong> a držiteľ viac ako 20 odborných certifikátov prináša do tímu hĺbkovú expertízu.</li>
-                            <li>Podieľal sa na úspešných projektoch pre klientov ako SSE, Dr.Max, Orange, O2, Telekom, ČSOB či Alza.</li>
-                        </ul>
-                    </div>
-                    <div class="team-member-bio" data-image-id="img-kristina">
-                        <h3>Kristína Kovačiková</h3>
-                        <h4>Account Executive</h4>
-                        <ul>
-                            <li>Ako <strong>pravá ruka CEO</strong> sa aktívne podieľa na realizácii projektov a zastrešuje grafické výstupy.</li>
-                            <li>Študuje marketingovú komunikáciu na Univerzite Konštantína Filozofa v Nitre, čím prepája teóriu s praxou.</li>
-                            <li>Jej silnými stránkami sú komunikatívnosť, cieľavedomosť a spoľahlivosť.</li>
-                        </ul>
-                    </div>
-                    <div class="team-member-bio" data-image-id="img-nina">
-                        <h3>Nina Lešková</h3>
-                        <h4>Account Executive</h4>
-                         <ul>
-                            <li>Zabezpečuje plynulú <strong>komunikáciu s klientmi</strong> a podporuje realizáciu kľúčových projektov.</li>
-                            <li>Popri práci študuje ekonómiu a marketing na Slovenskej poľnohospodárskej univerzite v Nitre.</li>
-                            <li>Do tímu prináša pozitívny a zároveň racionálny prístup, je spoločenská a ochotná pomôcť.</li>
-                        </ul>
-                    </div>
-                    <div class="team-member-bio" data-image-id="img-liliana">
-                        <h3>Liliana Polaková</h3>
-                        <h4>Social Media Manager</h4>
-                        <ul>
-                            <li>Zodpovedá za stratégiu a <strong>správu sociálnych sietí</strong> s preukázateľnými skúsenosťami, napríklad pre Hotel Janosík.</li>
-                            <li>Študuje manažment na Univerzite Cyrila a Metoda v Trnave.</li>
-                            <li>Je <strong>kreatívnym motorom tímu</strong>, do ktorého vnáša energiu, zábavu a podporu.</li>
-                        </ul>
-                    </div>
-                    <div class="team-member-bio" data-image-id="img-simona">
-                        <h3>Simona Lopošová</h3>
-                        <h4>Content & Communication Coordinator</h4>
-                        <ul>
-                            <li>Špecializuje sa na <strong>copywriting, grafiku</strong> a komunikáciu s klientmi.</li>
-                            <li>Má praktické skúsenosti s natáčaním, fotografovaním a vďaka výbornej angličtine aj s doučovaním.</li>
-                            <li>Študuje marketing na Univerzite Cyrila a Metoda v Trnave a do práce vnáša <strong>precíznosť a profesionalitu</strong>.</li>
-                        </ul>
+
+                    <div class="process-image">
+                        <img src="plan.png" alt="Náš proces">
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Team Section (Grid Cards) -->
+        <section id="team">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">TÍM</span>
+                    <h2 class="section-title">Zoznámte sa s <span class="gradient-text">naším tímom</span></h2>
+                </div>
+
+                <div class="team-grid">
+                    <!-- Member 1 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="image5.png" alt="Lukáš Bednár">
+                        </div>
+                        <div class="member-header">
+                            <h3>Lukáš Bednár</h3>
+                            <span class="role">CEO BOLD MEDIA</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
+                            <p class="bio">Strategicky vedie spolupráce s najväčšími značkami a reklamnými agentúrami na
+                                trhu. Bývalý šéf obchodného oddelenia v News & Media Holding s riadeným obratom 30 mil.
+                                €. Ako certifikovaný Google Trainer a držiteľ viac ako 20 odborných certifikátov prináša
+                                do tímu hĺbkovú expertízu. Podieľal sa na úspešných projektoch pre klientov ako SSE,
+                                Dr.Max, Orange, O2, Telekom, ČSOB či Alza.</p>
+                        </div>
+                    </div>
+
+                    <!-- Member 2 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="image1.png" alt="Kristína Kovačiková">
+                        </div>
+                        <div class="member-header">
+                            <h3>Kristína Kovačiková</h3>
+                            <span class="role">ACCOUNT EXECUTIVE</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
+                            <p class="bio">Ako pravá ruka CEO sa aktívne podieľa na realizácii projektov a zastrešuje
+                                grafické výstupy. Študuje marketingovú komunikáciu na Univerzite Konštantína Filozofa v
+                                Nitre, čím prepája teóriu s praxou. Jej silnými stránkami sú komunikatívnosť,
+                                cieľavedomosť a spoľahlivosť.</p>
+                        </div>
+                    </div>
+
+                    <!-- Member 3 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="image2.png" alt="Nina Lešková">
+                        </div>
+                        <div class="member-header">
+                            <h3>Nina Lešková</h3>
+                            <span class="role">ACCOUNT EXECUTIVE</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
+                            <p class="bio">Zabezpečuje plynulú komunikáciu s klientmi a podporuje realizáciu kľúčových
+                                projektov. Popri práci študuje ekonómiu a marketing na Slovenskej poľnohospodárskej
+                                univerzite v Nitre. Do tímu prináša pozitívny a zároveň racionálny prístup, je
+                                spoločenská a ochotná pomôcť.</p>
+                        </div>
+                    </div>
+
+                    <!-- Member 4 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="image3.png" alt="Liliana Polaková">
+                        </div>
+                        <div class="member-header">
+                            <h3>Liliana Polaková</h3>
+                            <span class="role">SOCIAL MEDIA MANAGER</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
+                            <p class="bio">Zodpovedá za stratégiu a správu sociálnych sietí s preukázateľnými
+                                skúsenosťami, napríklad pre Hotel Janosík. Študuje manažment na Univerzite Cyrila a
+                                Metoda v Trnave. Je kreatívnym motorom tímu, do ktorého vnáša energiu, zábavu a podporu.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Member 5 -->
+                    <div class="member-card">
+                        <div class="member-avatar">
+                            <img src="image4.png" alt="Simona Lopošová">
+                        </div>
+                        <div class="member-header">
+                            <h3>Simona Lopošová</h3>
+                            <span class="role">CONTENT & COMMUNICATION COORDINATOR</span>
+                        </div>
+                        <div class="member-indicator"></div>
+                        <div class="member-content">
+                            <p class="bio">Špecializuje sa na copywriting, grafiku a komunikáciu s klientmi. Má
+                                praktické skúsenosti s natáčaním, fotografovaním a vďaka výbornej angličtine aj s
+                                doučovaním. Študuje marketing na Univerzite Cyrila a Metoda v Trnave a do práce vnáša
+                                precíznosť a profesionalitu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
         <section id="contact">
-            <div class="container contact-container">
-                <div class="contact-info animate-on-scroll">
-                    <div class="sub-heading">SPOJME SA</div>
-                    <h2 class="section-title">Premeňme vašu víziu na realitu.</h2>
-                    <p class="section-intro">Či už ste na začiatku alebo chcete posunúť zabehnutú značku na novú úroveň, sme tu pre vás. Vyplňte formulár alebo nám napíšte priamo.</p>
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                            <a href="mailto:simona.loposova@boldmedia.sk">simona.loposova@boldmedia.sk</a>
+            <div class="container">
+                <div class="contact-wrapper">
+                    <div class="contact-header">
+                        <h2 class="big-cta">PRIPRAVENÍ<br><span class="gradient-text">NA ZMENU?</span></h2>
+                        <p>Váš rast je našou misiou. Poďme spolu vytvoriť niečo výnimočné.</p>
+                    </div>
+
+                    <div class="contact-grid">
+                        <div class="form-container">
+                            <form name="submit-to-google-sheet" class="glass-form">
+                                <h3 class="form-cta">VYTVORME NIEČO VEĽKÉ</h3>
+                                <div class="form-row">
+                                    <div class="input-wrap">
+                                        <input type="text" name="name" required placeholder=" ">
+                                        <label>Meno</label>
+                                    </div>
+                                    <div class="input-wrap">
+                                        <input type="text" name="company" required placeholder=" ">
+                                        <label>Firma</label>
+                                    </div>
+                                </div>
+                                <div class="input-wrap">
+                                    <input type="email" name="email" required placeholder=" ">
+                                    <label>Email / Telefónne číslo</label>
+                                </div>
+                                <div class="input-wrap">
+                                    <textarea name="message" required placeholder=" " rows="1"></textarea>
+                                    <label>Ako vám môžeme pomôcť?</label>
+                                </div>
+                                <button type="submit" class="btn-submit obsidian-btn" id="submit-btn">
+                                    <span class="btn-text">ODOSLAŤ VÍZIU</span>
+                                    <div class="btn-glow"></div>
+                                </button>
+                                <div id="form-status"></div>
+                            </form>
                         </div>
-                        <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            <span>Karadžičova 14, 821 08 Bratislava</span>
+
+                        <div class="contact-details">
+                            <div class="detail-item">
+                                <label>Email</label>
+                                <a href="mailto:simona.loposova@boldmedia.sk"
+                                    class="hover-link">simona.loposova@boldmedia.sk</a>
+                            </div>
+                            <div class="detail-item">
+                                <label>Adresa</label>
+                                <p>Karadžičova 14,<br>821 08 Bratislava</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="contact-form-wrapper animate-on-scroll">
-                    <!-- Upravený formulár -->
-                    <form name="submit-to-google-sheet" class="contact-form">
-                        <div class="form-group"><label for="name">Vaše meno</label><input type="text" id="name" name="name" required></div>
-                        <div class="form-group"><label for="email">Váš e-mail</label><input type="email" id="email" name="email" required></div>
-                        <div class="form-group"><label for="company">Názov spoločnosti (voliteľné)</label><input type="text" id="company" name="company"></div>
-                        <div class="form-group"><label for="message">Ako vám môžeme pomôcť?</label><textarea id="message" name="message" rows="5" required></textarea></div>
-                        <button type="submit" class="cta-button-main" id="submit-btn">Odoslať správu</button>
-                        <div id="form-status"></div>
-                    </form>
+
+                    <div class="team-group-photo-bottom footer-logo-group">
+                        <img src="group.png" alt="Bold Media Team">
+                    </div>
+
+                    <div class="footer-bottom">
+                        <div class="copyright">&copy; 2025 Bold Media. All rights reserved.</div>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="dark-section">
-        <div class="container">
-            <div class="footer-top">
-                 <div class="footer-brand"><img src="logo.png" alt="Bold Media Logo" class="footer-logo"><p>Dáta. Stratégia. Výsledky.</p></div>
-                <div class="footer-links">
-                     <h4>Navigácia</h4>
-                    <ul>
-                        <li><a href="#process">Náš prístup</a></li>
-                        <li><a href="#team">Náš tím</a></li>
-                        <li><a href="#contact">Kontakt</a></li>
-                    </ul>
-                </div>
-                 <div class="footer-contact">
-                    <h4>Spojte sa s nami</h4>
-                    <a href="mailto:simona.loposova@boldmedia.sk">simona.loposova@boldmedia.sk</a>
-                    <p>Karadžičova 14, 821 08 Bratislava</p>
-                </div>
-                 <div class="footer-parent">
-                    <h4>Súčasť skupiny</h4>
-                    <img src="group.png" alt="Logo materskej spoločnosti" class="parent-logo">
-                </div>
-            </div>
-            <div class="footer-bottom"><p>&copy; 2025 Bold Media. Všetky práva vyhradené.</p></div>
-        </div>
-    </footer>
-    
     <script src="script.js"></script>
 
-    <!-- NOVÝ SCRIPT: Posielanie dát ako JSON (Spoľahlivejšie) -->
+    <!-- Form Script -->
     <script>
-        // !!! SEM VLOŽTE NOVÚ URL ADRESU Z NASADENIA (DEPLOY) !!!
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxPsuq_tS_jpvN2ghMsHgC49C1SfDNsoRQoq0--lkR-1xXPF9SDAfjcePKjG_r6Wo9IUA/exec';
-        
         const form = document.forms['submit-to-google-sheet'];
         const statusMsg = document.getElementById('form-status');
         const submitBtn = document.getElementById('submit-btn');
@@ -285,54 +734,208 @@
 
         form.addEventListener('submit', e => {
             e.preventDefault();
-            
             submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Odosielam...';
-            submitBtn.classList.add('btn-loading');
-            statusMsg.style.display = 'none';
+            submitBtn.innerHTML = '<span>Odosielam...</span>';
 
-            // 1. Získame dáta z formulára
             const formData = new FormData(form);
-            // 2. Konvertujeme ich na obyčajný JavaScript objekt
             const data = Object.fromEntries(formData.entries());
 
-            // 3. Pošleme ako JSON string
-            // Používame no-cors, ale posielame stringify body, čo skript backendu spracuje cez JSON.parse
-            fetch(scriptURL, { 
-                method: 'POST', 
+            fetch(scriptURL, {
+                method: 'POST',
                 body: JSON.stringify(data),
-                mode: 'no-cors', // Dôležité pre obídenie CORS chýb v konzole
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8', // Používame text/plain aby sme sa vyhli "preflight" CORS requestu
-                }
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
             })
-            .then(() => {
-                // Pri no-cors nevidíme response, ale ak request nezlyhal, predpokladáme úspech
-                statusMsg.innerHTML = "Ďakujeme! Správa bola úspešne odoslaná. Čoskoro sa vám ozveme.";
-                statusMsg.className = "status-success";
-                statusMsg.style.display = "block";
-                
-                form.reset();
-                
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.classList.remove('btn-loading');
-                
-                setTimeout(() => {
-                    statusMsg.style.display = 'none';
-                }, 7000);
-            })
-            .catch(error => {
-                console.error('Error!', error.message);
-                statusMsg.innerHTML = "Chyba pri odosielaní. Skontrolujte pripojenie.";
-                statusMsg.className = "status-error";
-                statusMsg.style.display = "block";
-                
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.classList.remove('btn-loading');
+                .then(() => {
+                    statusMsg.innerHTML = "Správa prijatá. Čoskoro sa ozveme.";
+                    statusMsg.className = "success";
+                    form.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                    setTimeout(() => { statusMsg.innerHTML = ''; statusMsg.className = ''; }, 5000);
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    statusMsg.innerHTML = "Chyba. Skúste to prosím znova.";
+                    statusMsg.className = "error";
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                });
+        });
+    </script>
+
+    <!-- Horizontálny posuvník ovládanie -->
+    <script>
+        const slider = document.querySelector('.team-slider');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        prevBtn.addEventListener('click', () => {
+            slider.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            slider.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+    </script>
+
+    <script>
+        // Team card expand/collapse - bez tlačidla
+        document.querySelectorAll('.member-card').forEach(card => {
+            card.addEventListener('click', function () {
+                this.classList.toggle('expanded');
             });
         });
     </script>
+
+    <script>
+        // Dynamická animácia SVG v hero sekcii
+        function animateWaves() {
+            const wave1 = document.getElementById('wave1');
+            const wave2 = document.getElementById('wave2');
+            const pulse = document.getElementById('pulse');
+            let t = 0;
+            function animate() {
+                t += 0.03;
+                // Animate wave1
+                const q1 = 120 + Math.sin(t) * 25;
+                const q2 = 170 + Math.cos(t) * 25;
+                wave1.setAttribute('d', `M0,170 Q85,${q1} 170,${q2} T340,170`);
+                // Animate wave2
+                const q3 = 250 + Math.cos(t + 1) * 18;
+                const q4 = 200 + Math.sin(t + 1) * 18;
+                wave2.setAttribute('d', `M0,200 Q85,${q3} 170,${q4} T340,200`);
+                // Animate pulse
+                const r = 38 + Math.sin(t * 2) * 6;
+                pulse.setAttribute('r', r);
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        if (document.getElementById('wave1')) animateWaves();
+    </script>
+
+    <script>
+        // Dynamická animácia orbitujúcich bodov v hero sekcii
+        function animateOrbit() {
+            const svg = document.getElementById('orbit-svg');
+            if (!svg) return;
+            const dot1 = document.getElementById('dot1');
+            const dot2 = document.getElementById('dot2');
+            const dot3 = document.getElementById('dot3');
+            const dot4 = document.getElementById('dot4');
+            let t = 0;
+            function animate() {
+                t += 0.02;
+                // Dot1 - veľký orbit
+                let angle1 = t;
+                dot1.setAttribute('cx', 170 + Math.cos(angle1) * 90);
+                dot1.setAttribute('cy', 170 + Math.sin(angle1) * 90);
+                // Dot2 - menší orbit
+                let angle2 = t * 1.5;
+                dot2.setAttribute('cx', 170 + Math.cos(angle2) * 50);
+                dot2.setAttribute('cy', 170 + Math.sin(angle2) * 50);
+                // Dot3 - veľký orbit, posunutý
+                let angle3 = t + Math.PI / 2;
+                dot3.setAttribute('cx', 170 + Math.cos(angle3) * 90);
+                dot3.setAttribute('cy', 170 + Math.sin(angle3) * 90);
+                // Dot4 - menší orbit, posunutý
+                let angle4 = t + Math.PI;
+                dot4.setAttribute('cx', 170 + Math.cos(angle4) * 50);
+                dot4.setAttribute('cy', 170 + Math.sin(angle4) * 50);
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        if (document.getElementById('orbit-svg')) animateOrbit();
+    </script>
+
+    <script>
+        // Enhanced animation for the graphic element
+        function animateBMPulse() {
+            const circle = document.getElementById('bmPulseCircle');
+            const outerRing = document.getElementById('outerRing');
+            const middleRing = document.getElementById('middleRing');
+            const particle1 = document.getElementById('particle1');
+            const particle2 = document.getElementById('particle2');
+            const particle3 = document.getElementById('particle3');
+            const particle4 = document.getElementById('particle4');
+
+            if (!circle) return;
+
+            let t = 0;
+            function animate() {
+                t += 0.02;
+
+                // Pulsing inner circle
+                const r = 60 + Math.sin(t * 1.5) * 8;
+                circle.setAttribute('r', r);
+                circle.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t)) * 0.2);
+
+                // Rotating outer ring
+                if (outerRing) {
+                    const outerR = 120 + Math.sin(t * 0.8) * 5;
+                    outerRing.setAttribute('r', outerR);
+                    outerRing.setAttribute('opacity', 0.3 + Math.abs(Math.sin(t * 0.5)) * 0.2);
+                }
+
+                // Rotating middle ring (opposite direction)
+                if (middleRing) {
+                    const middleR = 90 + Math.cos(t * 1.2) * 4;
+                    middleRing.setAttribute('r', middleR);
+                    middleRing.setAttribute('opacity', 0.5 + Math.abs(Math.cos(t * 0.7)) * 0.2);
+                }
+
+                // Orbiting particles
+                if (particle1) {
+                    const angle1 = t;
+                    particle1.setAttribute('cx', 200 + Math.cos(angle1) * 120);
+                    particle1.setAttribute('cy', 200 + Math.sin(angle1) * 120);
+                    particle1.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 2)) * 0.4);
+                }
+
+                if (particle2) {
+                    const angle2 = t + Math.PI;
+                    particle2.setAttribute('cx', 200 + Math.cos(angle2) * 120);
+                    particle2.setAttribute('cy', 200 + Math.sin(angle2) * 120);
+                    particle2.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 2 + Math.PI)) * 0.4);
+                }
+
+                if (particle3) {
+                    const angle3 = t * 1.3;
+                    particle3.setAttribute('cx', 200 + Math.cos(angle3) * 90);
+                    particle3.setAttribute('cy', 200 + Math.sin(angle3) * 90);
+                    particle3.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 1.8)) * 0.4);
+                }
+
+                if (particle4) {
+                    const angle4 = t * 1.3 + Math.PI;
+                    particle4.setAttribute('cx', 200 + Math.cos(angle4) * 90);
+                    particle4.setAttribute('cy', 200 + Math.sin(angle4) * 90);
+                    particle4.setAttribute('opacity', 0.6 + Math.abs(Math.sin(t * 1.8 + Math.PI)) * 0.4);
+                }
+
+                // Yellow accent particles - smaller orbits
+                if (particle5) {
+                    const angle5 = t * 2;
+                    particle5.setAttribute('cx', 200 + Math.cos(angle5) * 45);
+                    particle5.setAttribute('cy', 200 + Math.sin(angle5) * 45);
+                    particle5.setAttribute('opacity', 0.7 + Math.abs(Math.sin(t * 3)) * 0.3);
+                }
+
+                if (particle6) {
+                    const angle6 = t * 2 + Math.PI;
+                    particle6.setAttribute('cx', 200 + Math.cos(angle6) * 45);
+                    particle6.setAttribute('cy', 200 + Math.sin(angle6) * 45);
+                    particle6.setAttribute('opacity', 0.7 + Math.abs(Math.sin(t * 3 + Math.PI)) * 0.3);
+                }
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        if (document.getElementById('bmPulseCircle')) animateBMPulse();
+    </script>
 </body>
+
 </html>
