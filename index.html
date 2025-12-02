@@ -286,58 +286,144 @@
 
                 <div class="hero-visual">
                     <div id="hero-canvas-container"></div>
-                    <!-- Enhanced graphic element: animated rings with glow and yellow accents -->
-                    <div class="media-orbit">
-                        <svg id="bm-logo-pulse" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <radialGradient id="bmGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                                    <stop offset="0%" stop-color="#ffd700" stop-opacity="0.9" />
-                                    <stop offset="40%" stop-color="#1565c0" stop-opacity="0.7" />
-                                    <stop offset="100%" stop-color="#0a3d91" stop-opacity="0.4" />
-                                </radialGradient>
-                                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#1565c0" />
-                                    <stop offset="50%" stop-color="#4d94ff" />
-                                    <stop offset="100%" stop-color="#ffd700" />
-                                </linearGradient>
-                                <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#ffd700" />
-                                    <stop offset="100%" stop-color="#ffed4e" />
-                                </linearGradient>
-                                <filter id="glow">
-                                    <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                                    <feMerge>
-                                        <feMergeNode in="coloredBlur" />
-                                        <feMergeNode in="SourceGraphic" />
-                                    </feMerge>
-                                </filter>
-                            </defs>
+                    <script>
+                        // Three.js Hero Visual - Reply.ai Style (Abstract Network/Brain)
+                        (function () {
+                            const container = document.getElementById('hero-canvas-container');
+                            if (!container) return;
 
-                            <!-- Outer rotating ring with blue-yellow gradient -->
-                            <circle id="outerRing" cx="200" cy="200" r="120" stroke="url(#ringGradient)"
-                                stroke-width="2" fill="none" opacity="0.5" filter="url(#glow)" />
+                            const scene = new THREE.Scene();
+                            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 
-                            <!-- Middle ring -->
-                            <circle id="middleRing" cx="200" cy="200" r="90" stroke="url(#ringGradient)"
-                                stroke-width="3" fill="none" opacity="0.6" filter="url(#glow)" />
+                            renderer.setSize(container.clientWidth, container.clientHeight);
+                            renderer.setPixelRatio(window.devicePixelRatio);
+                            container.appendChild(renderer.domElement);
 
-                            <!-- Inner pulsing circle with yellow center -->
-                            <circle id="bmPulseCircle" cx="200" cy="200" r="60" fill="url(#bmGradient)" opacity="0.8"
-                                filter="url(#glow)" />
+                            // Particles
+                            const particlesGeometry = new THREE.BufferGeometry();
+                            const particlesCount = 700;
+                            const posArray = new Float32Array(particlesCount * 3);
 
-                            <!-- Orbiting particles - mix of blue and yellow -->
-                            <circle id="particle1" cx="200" cy="80" r="5" fill="#ffd700" opacity="0.9"
-                                filter="url(#glow)" />
-                            <circle id="particle2" cx="200" cy="320" r="4" fill="#1565c0" opacity="0.8" />
-                            <circle id="particle3" cx="80" cy="200" r="4.5" fill="#ffed4e" opacity="0.9"
-                                filter="url(#glow)" />
-                            <circle id="particle4" cx="320" cy="200" r="4" fill="#4d94ff" opacity="0.8" />
+                            for (let i = 0; i < particlesCount * 3; i++) {
+                                posArray[i] = (Math.random() - 0.5) * 5; // Spread
+                            }
 
-                            <!-- Additional yellow accent particles -->
-                            <circle id="particle5" cx="200" cy="200" r="3" fill="#ffd700" opacity="0.9" />
-                            <circle id="particle6" cx="200" cy="200" r="3" fill="#ffed4e" opacity="0.9" />
-                        </svg>
-                    </div>
+                            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+                            // Material
+                            const material = new THREE.PointsMaterial({
+                                size: 0.02,
+                                color: 0x4d94ff, // Light Blue
+                                transparent: true,
+                                opacity: 0.8,
+                            });
+
+                            // Mesh
+                            const particlesMesh = new THREE.Points(particlesGeometry, material);
+                            scene.add(particlesMesh);
+
+                            // Connecting Lines (Plexus) - Simplified for performance
+                            // We will use a separate LineSegments object for connections
+                            // But for a true Reply.ai look, a "Sphere" of nodes is better.
+
+                            // Let's create a Sphere of nodes instead of random cloud
+                            const sphereGeo = new THREE.IcosahedronGeometry(1.8, 2);
+                            const sphereMat = new THREE.MeshBasicMaterial({
+                                color: 0x1565c0,
+                                wireframe: true,
+                                transparent: true,
+                                opacity: 0.15
+                            });
+                            const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+                            scene.add(sphere);
+
+                            // Add particles to vertices of the sphere
+                            const sphereParticlesGeo = new THREE.BufferGeometry();
+                            const sphereVerts = sphereGeo.attributes.position.array;
+                            sphereParticlesGeo.setAttribute('position', new THREE.BufferAttribute(sphereVerts, 3));
+                            const sphereParticlesMat = new THREE.PointsMaterial({
+                                size: 0.04,
+                                color: 0xffd700, // Gold accents
+                                transparent: true,
+                                opacity: 0.8
+                            });
+                            const sphereParticles = new THREE.Points(sphereParticlesGeo, sphereParticlesMat);
+                            scene.add(sphereParticles);
+
+                            // Inner Core
+                            const coreGeo = new THREE.IcosahedronGeometry(0.8, 1);
+                            const coreMat = new THREE.MeshBasicMaterial({
+                                color: 0x0066FF,
+                                wireframe: true,
+                                transparent: true,
+                                opacity: 0.3
+                            });
+                            const core = new THREE.Mesh(coreGeo, coreMat);
+                            scene.add(core);
+
+                            // Lighting
+                            const pointLight = new THREE.PointLight(0xffffff, 1);
+                            pointLight.position.set(2, 3, 4);
+                            scene.add(pointLight);
+
+                            camera.position.z = 4;
+
+                            // Mouse Interaction
+                            let mouseX = 0;
+                            let mouseY = 0;
+                            let targetX = 0;
+                            let targetY = 0;
+
+                            const windowHalfX = container.clientWidth / 2;
+                            const windowHalfY = container.clientHeight / 2;
+
+                            document.addEventListener('mousemove', (event) => {
+                                mouseX = (event.clientX - windowHalfX);
+                                mouseY = (event.clientY - windowHalfY);
+                            });
+
+                            // Animation Loop
+                            const clock = new THREE.Clock();
+
+                            function animate() {
+                                targetX = mouseX * 0.001;
+                                targetY = mouseY * 0.001;
+
+                                const elapsedTime = clock.getElapsedTime();
+
+                                // Rotate entire system
+                                sphere.rotation.y += 0.002;
+                                sphere.rotation.x += 0.001;
+                                sphereParticles.rotation.y += 0.002;
+                                sphereParticles.rotation.x += 0.001;
+
+                                core.rotation.y -= 0.005;
+                                core.rotation.x -= 0.002;
+
+                                // Gentle float
+                                sphere.position.y = Math.sin(elapsedTime * 0.5) * 0.1;
+                                sphereParticles.position.y = Math.sin(elapsedTime * 0.5) * 0.1;
+                                core.position.y = Math.sin(elapsedTime * 0.5) * 0.1;
+
+                                // Mouse interaction easing
+                                sphere.rotation.y += 0.05 * (targetX - sphere.rotation.y);
+                                sphere.rotation.x += 0.05 * (targetY - sphere.rotation.x);
+
+                                renderer.render(scene, camera);
+                                requestAnimationFrame(animate);
+                            }
+
+                            animate();
+
+                            // Handle Resize
+                            window.addEventListener('resize', () => {
+                                camera.aspect = container.clientWidth / container.clientHeight;
+                                camera.updateProjectionMatrix();
+                                renderer.setSize(container.clientWidth, container.clientHeight);
+                            });
+                        })();
+                    </script>
                 </div>
 
         </section>
