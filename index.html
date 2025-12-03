@@ -241,9 +241,7 @@
     <!-- 3D Background Canvas -->
     <canvas id="webgl"></canvas>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    <!-- Custom Cursor Removed -->
 
     <!-- Navigation -->
     <nav class="glass-nav">
@@ -270,6 +268,9 @@
 
         <!-- Hero Section -->
         <section id="hero">
+            <!-- Animated Stars Background -->
+            <div class="stars-container" id="stars-container"></div>
+
             <div class="container hero-container">
                 <div class="hero-content">
                     <h1 class="hero-title">
@@ -427,6 +428,44 @@
                 </div>
 
         </section>
+
+        <script>
+            // Generate Stars
+            document.addEventListener('DOMContentLoaded', () => {
+                const starsContainer = document.getElementById('stars-container');
+                const starCount = 80; // Increased count for mixed colors
+
+                for (let i = 0; i < starCount; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('star');
+
+                    // Randomly assign blue color (approx 50% chance)
+                    if (Math.random() > 0.5) {
+                        star.classList.add('blue');
+                    }
+
+                    // Random Position
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+
+                    // Random Size
+                    const size = Math.random() * 3 + 1; // 1px to 4px
+
+                    // Random Animation
+                    const duration = Math.random() * 3 + 2; // 2s to 5s
+                    const delay = Math.random() * 5;
+
+                    star.style.left = `${x}%`;
+                    star.style.top = `${y}%`;
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    star.style.setProperty('--twinkle-duration', `${duration}s`);
+                    star.style.setProperty('--twinkle-delay', `${delay}s`);
+
+                    starsContainer.appendChild(star);
+                }
+            });
+        </script>
 
         <!-- Marquee Section -->
         <div class="marquee-section">
