@@ -350,6 +350,10 @@ a {
     transition: color 0.3s;
 }
 
+.nav-link:hover {
+    color: var(--accent-light);
+}
+
 /* Active Link Indicator */
 .nav-link.active::before {
     content: '';
@@ -362,19 +366,7 @@ a {
     border-radius: 2px;
 }
 
-.nav-link::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    color: var(--accent-light);
-    transition: top 0.3s;
-}
 
-.nav-link:hover::after {
-    top: 0;
-}
 
 .btn-cta {
     background: white;
