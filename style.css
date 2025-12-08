@@ -485,38 +485,69 @@ a {
 
 /* --- Hero Section --- */
 #hero {
+    position: relative;
     min-height: 100vh;
+    background: #111a36;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    position: relative;
-    padding-top: 100px;
-    overflow: hidden;
 }
 
 .hero-container {
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 50px;
+    gap: 40px;
+    width: 100%;
 }
 
 .hero-content {
     flex: 1;
-    max-width: 60%;
-    /* Limit text width */
-    text-align: left;
     z-index: 2;
 }
 
 .hero-visual {
     flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
-    z-index: 1;
+    min-width: 350px;
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Nový SVG grafický prvok */
+.media-orbit {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 340px;
+    height: 340px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+@media (max-width: 900px) {
+    .hero-container {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .hero-visual {
+        min-width: 100%;
+        min-height: 220px;
+        justify-content: center;
+    }
+
+    .media-orbit {
+        position: static;
+        transform: none;
+        margin: 0 auto;
+        width: 220px;
+        height: 220px;
+    }
 }
 
 /* --- Three.js Hero Visual --- */
@@ -537,21 +568,9 @@ a {
     outline: none;
 }
 
-
-@media (max-width: 992px) {
-    .hero-container {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .hero-content {
-        max-width: 100%;
-        text-align: center;
-    }
-
-    .hero-visual {
-        display: none;
-        /* Hide on mobile/tablet to save space */
+@media (max-width: 900px) {
+    #hero-canvas-container {
+        min-height: 220px;
     }
 }
 
@@ -1085,214 +1104,143 @@ a {
     max-width: 600px;
 }
 
-/* --- Team (Grid Cards with Animation) --- */
+/* --- Team Section (New Design) --- */
 #team {
-    padding: 150px 0 50px 0;
+    padding: 120px 0;
+    background: linear-gradient(120deg, #101a3c 0%, #050a18 100%);
+    color: #e6e9ee;
+}
+
+#team .section-header {
+    text-align: left;
+    margin-bottom: 60px;
+}
+
+#team .section-header .section-label {
+    display: inline-block;
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+    color: #0d47a1;
+    margin-bottom: 15px;
+}
+
+#team .section-header .section-title {
+    color: #fff;
+    font-size: 3rem;
+    margin-bottom: 20px;
 }
 
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    /* All 5 side-by-side */
-    gap: 20px;
-    /* Tighter gap for 5 items */
-    margin-bottom: 0;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
 }
 
-/* --- Uniform Cards --- */
 .member-card {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(13, 71, 161, 0.05), rgba(13, 71, 161, 0.02));
+    border: 1px solid rgba(13, 71, 161, 0.2);
+    border-radius: 20px;
     overflow: hidden;
-    text-align: left;
-    /* Changed to left for bios */
+    box-shadow: 0 8px 32px rgba(2, 6, 23, 0.5);
     transition: all 0.4s ease;
-    position: relative;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
     height: 100%;
-    /* Full height */
     display: flex;
     flex-direction: column;
 }
 
 .member-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--accent-blue);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px);
+    border-color: rgba(13, 71, 161, 0.4);
+    box-shadow: 0 15px 50px rgba(13, 71, 161, 0.2);
 }
 
-.member-img {
+.member-avatar {
     width: 100%;
-    aspect-ratio: 3/4;
+    height: 340px;
     overflow: hidden;
+    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
     position: relative;
+    flex-shrink: 0;
 }
 
-.member-img img {
+.member-avatar img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center 15%;
-    /* Align faces at approx 15% from top */
-    transition: transform 0.6s ease;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.4s ease;
 }
 
-.member-card:hover .member-img img {
+.member-card:hover .member-avatar img {
     transform: scale(1.05);
-    /* Slight zoom, keeping head in view */
 }
 
-.member-info {
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    padding: 20px;
-    padding-bottom: 25px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 50%);
-    position: absolute;
+.member-header {
+    padding: 20px 25px;
+    text-align: center;
+}
+
+.member-header h3 {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.member-header .role {
+    font-size: 0.85rem;
+    color: #0d47a1;
+    margin-bottom: 0;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.member-content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    transition: background 0.5s ease, padding 0.5s ease;
-    border: none;
-    border-radius: 0;
-    transform: none;
-    box-shadow: none;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent-blue) rgba(0, 0, 0, 0.5);
-    will-change: background, padding;
-    scroll-behavior: smooth;
-}
-
-/* Custom Scrollbar for Webkit - Enhanced */
-.member-info::-webkit-scrollbar {
-    width: 6px;
-    /* Slightly wider for better visibility */
-    display: block;
-}
-
-.member-info::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-    margin: 10px 0;
-    /* Add margin to track */
-}
-
-.member-info::-webkit-scrollbar-thumb {
-    background: var(--accent-blue);
-    border-radius: 3px;
-    transition: background 0.3s;
-}
-
-.member-info::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-light);
-    /* Lighter blue on hover */
-}
-
-
-.member-card:hover .member-info {
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: grayscale(100%) contrast(1.2);
-    padding-bottom: 15px;
-    padding-top: 15px;
-    justify-content: flex-start;
-}
-
-.member-info h3 {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    line-height: 1.1;
-    margin-bottom: 8px;
-    padding-top: 0;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
-    font-weight: 900;
-    transform: translateY(40px);
-    transform-origin: left bottom;
-    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), margin 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-    margin-top: auto;
-    will-change: transform, margin;
-}
-
-.member-card:hover .member-info h3 {
-    transform: translateY(0) scale(0.85);
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
-.member-info .role {
-    color: #8AB8FF;
-    background: rgba(0, 0, 0, 0.6);
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 800;
-    padding: 4px 8px;
-    display: inline-block;
-    align-self: flex-start;
-    margin-bottom: 8px;
-    transform: translateY(40px);
-    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.05s;
-    will-change: transform, margin;
-}
-
-.member-card:hover .member-info .role {
-    transform: translateY(0);
-    margin-bottom: 8px;
-}
-
-.member-info .bio {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.95);
-    line-height: 1.5;
-    opacity: 0;
+    justify-content: flex-end;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s ease 0.1s;
-    will-change: max-height, opacity;
+    padding: 0 25px;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.5s ease;
 }
 
-.member-card:hover .member-info .bio {
-    opacity: 1;
-    max-height: 1000px;
-    /* Allow full expansion */
-    margin-top: 0;
+.member-card:hover .member-content {
+    max-height: 500px;
+    padding: 20px 25px;
 }
 
-.team-group-photo-bottom {
-    width: 100%;
-    height: 500px;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    border: 1px solid var(--glass-border);
+.member-content .bio {
+    font-size: 0.9rem;
+    color: #cbd5df;
+    line-height: 1.6;
+    margin: 0;
 }
 
-.team-group-photo-bottom img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(100%);
-    transition: filter 0.5s;
-}
-
-.team-group-photo-bottom:hover img {
-    filter: grayscale(0%);
+.member-indicator {
+    display: none;
 }
 
 @media (max-width: 768px) {
-    .timeline-step::after {
-        left: 30px;
-        top: 30px;
+    #team .section-header .section-title {
+        font-size: 2rem;
     }
 
-    .step-num {
-        width: 60px;
-        height: 60px;
-        font-size: 1.2rem;
+    .member-card {
+        border-radius: 16px;
+    }
+
+    .member-avatar {
+        height: 300px;
+    }
+
+    .member-header {
+        padding: 18px 20px;
     }
 }
 
